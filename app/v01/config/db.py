@@ -27,6 +27,3 @@ SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 Base = declarative_base()
 
 meta_data = MetaData()
-
-
-
