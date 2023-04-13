@@ -17,9 +17,8 @@ from sqlalchemy.orm import Session
 
 
 # librerías para el reto endpoint matemático
-from random import randint
 from math import lcm as mcm
-from functools import reduce 
+
 
 settings = Settings()
 
@@ -134,11 +133,9 @@ def get_jokes(number: int):
 
 @joke.post("/api/"+appname+"/"+ver+"/mcm/", status_code=HTTP_201_CREATED)
 def get_mcm(entrada: numbers_schema.NumbersSchema):
-    try:
-        #implementar la función y pasarle la lista de numeros para realizar el cálculo del mcm
-        
+    try:                
         if(entrada.numbers):   
-            mcm = get_mcm(entrada.numbers)
+            mcm = get_mcm(entrada.numbers) #llamada a la función que calcula el mcm
             if mcm > 0:      
                 return {
                     "status": 200,                
