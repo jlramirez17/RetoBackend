@@ -10,15 +10,15 @@ import json
 from fastapi import APIRouter, Response, Depends
 from starlette.status import HTTP_201_CREATED, HTTP_204_NO_CONTENT, HTTP_401_UNAUTHORIZED
 from app.v01.utils.settings import Settings
-from app.v01.schema  import jokes_schema
+from app.v01.schema  import jokes_schema, numbers_schema
 from app.v01.config.db import SessionLocal, engine, Base
 from app.v01.model import jokes
 from sqlalchemy.orm import Session
 
 
 # librerías para el reto endpoint matemático
-from random import randint
-from math import lcm as mcm 
+from math import lcm as mcm
+
 
 settings = Settings()
 
@@ -130,14 +130,22 @@ def get_jokes(number: int):
 
 
 #obtener mcm de una lista de números 
-@joke.get("/api/"+appname+"/"+ver+"/mcm/{numbers[]}", status_code=HTTP_201_CREATED)
-def get_jokes(numbers: list):
-    try:
-        if(numbers):            
-            return {
-                "status": 200,                
-                "message" : f"El Mínimo Común M+ultiplo de la lista {numbers} {mcm}"
-            }
+
+@joke.post("/api/"+appname+"/"+ver+"/mcm/", status_code=HTTP_201_CREATED)
+def get_mcm(entrada: numbers_schema.NumbersSchema):
+    try:                
+        if(entrada.numbers):   
+            mcm = get_mcm(entrada.numbers) #llamada a la función que calcula el mcm
+            if mcm > 0:      
+                return {
+                    "status": 200,                
+                    "message" : f"El Mínimo Común M+ultiplo de la lista {entrada.numbers} {mcm}"
+                }
+            else:
+                return {
+                    "status": 400,                
+                    "message" : f"Envíe una lista de valores válidos, número mayores a cero {entrada.numbers} {mcm}"
+                }
     except Exception as ex:        
         return {'message': str(ex)}
     
@@ -184,6 +192,14 @@ def update_joke(entrada:jokes_schema.JokeDelete, db:Session=Depends(get_db)):
            }      
 
 
+def get_mcm(numbers):
+    if numbers:
+        for num in numbers:
+            resultado = mcm(*numbers) # pasamos cada item de la lista como argumento.
+            print(str(numbers).replace('[', '').replace(']', ''))
+            return resultado
+    else:
+        return 0
 
 
 
