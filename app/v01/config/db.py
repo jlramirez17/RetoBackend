@@ -5,7 +5,7 @@
     Programador: José Luis Ramirez - JLRAMIREZ
     Descripción: Definición de la configuración de la conexión a la BD PostgreSql
 """
-from sqlalchemy import create_engine, MetaData
+from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from app.v01.utils.settings import Settings
@@ -26,7 +26,6 @@ SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 
 Base = declarative_base()
 
-meta_data = MetaData()
 
 
 
